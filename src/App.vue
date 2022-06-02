@@ -1,16 +1,14 @@
-<template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
-</template>
+
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import electrisCalculator from './components/calculator/electrisCalculator.vue'
+
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
+    'electriscalculator' : electrisCalculator
+  },
 }
 </script>
 
@@ -24,3 +22,8 @@ export default {
   margin-top: 60px;
 }
 </style>
+<template>
+  <div>
+    <electriscalculator />
+  </div>
+</template>
