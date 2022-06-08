@@ -39,5 +39,10 @@ export default {
 </template>
 
 <style scoped>
-
+    .bloc-tarif {
+        display: inline-block;
+        vertical-align: top;
+        width: 40%;
+        min-width: 300px;
+    }
 </style>

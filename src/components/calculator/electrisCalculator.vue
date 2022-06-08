@@ -1,10 +1,18 @@
 <script>
 
 import resulttarif from './resultTarif.vue'
+import { Form, Field, ErrorMessage } from 'vee-validate';
+import * as yup from 'yup';
+
 export default ({
     name: 'electrisCalculator',
     data() {
+
         return {
+            yupObject: yup.object({
+                adress : yup.string().matches(/^[a-zA-Z_.]/g, "chiffres non acceptés").required("ce champs est requis"),
+                killowattInput : yup.number().typeError("doit etre un chiffre").min(100, "valeur trop petite").required("ce champs est requis"),
+            }),
             //calculator data
             personSelectionData : '',
             citySelectionData : '',
@@ -17,11 +25,14 @@ export default ({
             removeAdressList : false,
 
             // person selection
-            kilowatt : ''
+            kilowatt : '',
+
+            
         }
     },
     components : {
         'resulttarifpage' : resulttarif,
+        Form, Field, ErrorMessage
         
     },
     methods : {
@@ -80,11 +91,17 @@ export default ({
                 });
             }
             for (let i = 0; i < index; i++) {
-                
                 listPersonArray[i].classList.add('active') 
                 
             }
         },
+    },
+    computed : {
+        shema() {
+            return this.yupObject
+
+            
+        }
     },
     mounted() {
         this.getData()
@@ -95,11 +112,13 @@ export default ({
 <template>
     <div class="calculator-content">
         <h1>In wenigen Schritten zu Ihrem Tarif</h1>
-        <form @submit.prevent="onSubmit">
+        <Form @submit="onSubmit" :validationSchema="shema">
 
             <ul>
                 <li>
-                    <input required type="text" name="adress" v-model="adressInput" @input="adressInputEvent(adressInput)">
+                    <Field type="text" name="adress" v-model="adressInput" @input="adressInputEvent(adressInput)" />
+                    <ErrorMessage name="adress" />
+
                     <ul v-if="adressToShow != ''" class="adress-to-show" :class="removeAdressList? 'hide' : ''" >
                         <li v-for="(adress, index) in adressToShow" :key="index" @click="putAdressToInput(adress)">{{adress}}</li>
                     </ul>
@@ -109,13 +128,14 @@ export default ({
                         <ul class="content-person">
                             <li class="icon-person-content" v-for="(n, index) in 5" :key="index" @click="getIndex(index)"><span class="icon"></span></li>
                         </ul>
-                        <input required type="text" v-model="kilowatt">
+                        <Field name="killowattInput" required type="text" v-model="kilowatt" />
+                        <ErrorMessage name="killowattInput" />
                     </div>
                     
                 </li>
             </ul>
             <input class="button-calcul" type="submit" value="kalkulieren">
-        </form>
+        </Form>
 
 
 
